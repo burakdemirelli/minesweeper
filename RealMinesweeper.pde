@@ -68,3 +68,7 @@ void placeFlag(int[][][] grid, int x, int y){
 
 // TO-DO
 // write getNearbyBombs()
+// >> user pressed
+// if bomb -> game over
+// else, if nearbyBomb is 0 display it
+// 
