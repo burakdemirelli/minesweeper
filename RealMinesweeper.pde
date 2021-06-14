@@ -1,6 +1,6 @@
-int x;
-int y;
-int bombCount;
+int x = 15;
+int y = 15;
+int bombCount = 15;
 color backgroundColor = color(255, 255, 255);
 color flagColor = color(255, 255, 255);
 int flagCount;
@@ -66,8 +66,62 @@ void placeFlag(int[][][] grid, int x, int y){
 //input -> tile x,y
 //check if the tile pressed is empty 
 
+int getNearbyBombs(int x, int y){
+    int nearbyBombs = 0;
+    int dummyX = x-1;
+    int dummyY = y-1;
+
+    /* 
+    the dummy coordinates offsets the x and y coordinates to the top left corner
+
+    for loop goes through rows and columns checking ig it is a bomb
+    see the actual coordinates (!not offset ones!) below:
+
+    actual coordinates
+    [x-1,y-1], [x,y-1], [x+1,y-1],
+    [x-1,y],   [x,y],    [x+1,y],
+    [x-1,y+1], [x,y+1],  [x+1,y+1]
+    */
+    for (int row = 0; row < 3; row++){
+        for(int column = 0; row < 3; column++){
+            if(getState(dummyX, dummyY) == Level.BOMB){
+                nearbyBombs += 1; 
+            }
+            dummyX += 1;
+        }
+        dummyY += 1;
+    }
+    return nearbyBombs;
+}
+
+enum State = {
+    FLAG,
+    BOMB,
+    EMPTY
+}
+
+State getState(int x, int y){
+    State state;
+    //if it is a flag or a flagged bomb
+    // ! CAUTION ! if a bomb is flagged this will return a flag
+    // not sure if this affects gameplay || causes bugs
+    if( gameGrid[y][x] == [1,1] || gameGrid[y][x] == [1,0]){
+        state = state.FLAG;
+    }
+    else if(gameGrid[y][x] == [0,1]){
+        state = state.BOMB;
+    }
+    else{
+        state = state.EMPTY;
+    }
+    return state;
+}
+//mouse handler
+
 // TO-DO
-// write getNearbyBombs()
+// getState | done
+// research Breadth first search or depth first search
+// write getNearbyBombs() | done
 // >> user pressed
 // if bomb -> game over
 // else, if nearbyBomb is 0 display it
